@@ -62,8 +62,7 @@ function show(req, res) {
 
   const tagsSql = `
               SELECT tags.* 
-              FROM tags 
-              
+              FROM tags               
               INNER JOIN post_tag
               ON tags.id = post_tag.tag_id
               WHERE post_tag.post_id = ?
@@ -100,15 +99,27 @@ function show(req, res) {
 
 // * STORE
 function store(req, res) {
+  const { title, content, image } = req.body;
+
+  if (!title || !content || !image) {
+    const err = new Error("Check all parameters passed");
+    err.status = 400;
+    err.error = "Bad request by client";
+    throw err;
+  }
+
   const sql = `
-              INSERT INTO blog (title, content, image) 
+              INSERT INTO posts (title, content, image) 
               VALUES (?, ?, ?);
               `;
 
-  // TODO
-  /*  const { title, content, author, image, category, isPublished, tags } =
-    req.body;
+  connection.query(sql, [title, content, image], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json({ title, content, image });
+  });
 
+  // TODO
+  /*  
   if (!title || !content || !Array.isArray(tags) || !category || !tags.length) {
     const err = new Error("Check all parameters passed");
     err.status = 400;
