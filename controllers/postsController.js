@@ -4,8 +4,16 @@ const categories = require("../data/postCategories");
 
 // * INDEX
 function index(req, res) {
+  const sql = `SELECT * FROM posts;`;
+
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
+
   // TODO
-  /*   const titleFilter = req.query.title;
+  /*   
+  const titleFilter = req.query.title;
   const hashtagFilter = req.query.hashtag;
   let newPostList = posts;
 
@@ -64,6 +72,11 @@ function show(req, res) {
 
 // * STORE
 function store(req, res) {
+  const sql = `
+              INSERT INTO blog (title, content, image) 
+              VALUES (?, ?, ?);
+              `;
+
   // TODO
   /*  const { title, content, author, image, category, isPublished, tags } =
     req.body;
@@ -180,6 +193,12 @@ function modify(req, res) {
 // * DESTROY
 function destroy(req, res) {
   const id = parseInt(req.params.id);
+
+  const sql = `DELETE FROM posts WHERE id = ?`;
+  connection.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.sendStatus(204);
+  });
 
   // TODO
   /*
