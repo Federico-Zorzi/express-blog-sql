@@ -1,9 +1,11 @@
-const posts = require("../db/postsList");
-const categories = require("../db/postCategories");
+// const posts = require("../db/postsList");
+const connection = require("../data/db");
+const categories = require("../data/postCategories");
 
 // * INDEX
 function index(req, res) {
-  const titleFilter = req.query.title;
+  // TODO
+  /*   const titleFilter = req.query.title;
   const hashtagFilter = req.query.hashtag;
   let newPostList = posts;
 
@@ -29,14 +31,16 @@ function index(req, res) {
     newPostList,
     categories,
     listLength: newPostList.length,
-  });
+  }); */
 }
 
 // * SHOW
 function show(req, res) {
   const id = parseInt(req.params.id);
 
-  /* controllo se l'id è valido */
+  // TODO
+  /* 
+  // controllo se l'id è valido
   if (isNaN(id)) {
     const err = new Error("Id required not valid");
     err.status = 400;
@@ -44,7 +48,7 @@ function show(req, res) {
     throw err;
   }
 
-  /* trovo il post tramite l'id */
+  // trovo il post tramite l'id
   const postRequired = posts.find((post) => post.id === id);
 
   if (!postRequired) {
@@ -54,13 +58,14 @@ function show(req, res) {
     throw err;
   }
 
-  /* res.send(`Show post with id ${id}`); */
-  res.json(postRequired);
+  // res.send(`Show post with id ${id}`);
+  res.json(postRequired); */
 }
 
 // * STORE
 function store(req, res) {
-  const { title, content, author, image, category, isPublished, tags } =
+  // TODO
+  /*  const { title, content, author, image, category, isPublished, tags } =
     req.body;
 
   if (!title || !content || !Array.isArray(tags) || !category || !tags.length) {
@@ -84,14 +89,16 @@ function store(req, res) {
   };
   posts.push(newPost);
 
-  res.json({ newPost, posts });
+  res.json({ newPost, posts }); */
 }
 
 // * UPDATE
 function update(req, res) {
   const id = parseInt(req.params.id);
 
-  /* controllo se l'id è valido */
+  // TODO
+  /* 
+  // controllo se l'id è valido
   if (isNaN(id)) {
     const err = new Error("Id required not valid");
     err.status = 400;
@@ -122,14 +129,16 @@ function update(req, res) {
   postUpdated.image = image;
   postUpdated.tags = tags;
 
-  res.json({ postUpdated, posts });
+  res.json({ postUpdated, posts }); */
 }
 
 // * MODIFY
 function modify(req, res) {
   const id = parseInt(req.params.id);
 
-  /* controllo se l'id è valido */
+  // TODO
+  /* 
+  // controllo se l'id è valido
   if (isNaN(id)) {
     const err = new Error("Id required not valid");
     err.status = 400;
@@ -165,14 +174,16 @@ function modify(req, res) {
     }
   }
 
-  res.json({ postModified, posts });
+  res.json({ postModified, posts }); */
 }
 
 // * DESTROY
 function destroy(req, res) {
   const id = parseInt(req.params.id);
 
-  /* controllo se l'id è valido */
+  // TODO
+  /*
+ // controllo se l'id è valido 
   if (isNaN(id)) {
     const err = new Error("Id required not valid");
     err.status = 400;
@@ -180,7 +191,7 @@ function destroy(req, res) {
     throw err;
   }
 
-  /* ricerca dell'index dell'elemento con l'id scelto da eliminare */
+  // ricerca dell'index dell'elemento con l'id scelto da eliminare
   const postToDelete = posts.find((post) => post.id === id);
 
   if (!postToDelete) {
@@ -199,12 +210,12 @@ function destroy(req, res) {
     throw err;
   }
 
-  /* rimozione dell'index trovato */
+  // rimozione dell'index trovato
   const postDeleted = posts.splice(postToDeleteIndex, 1);
 
-  /*   res.send(`Delete post with id ${id}`); */
+  //   res.send(`Delete post with id ${id}`);
   console.log({ postDeleted, posts });
-  res.status(200).json({ postDeleted, posts });
+  res.status(200).json({ postDeleted, posts }); */
 }
 
 module.exports = { index, show, store, update, modify, destroy };
