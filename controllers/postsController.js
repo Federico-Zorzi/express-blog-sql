@@ -46,13 +46,6 @@ function index(req, res) {
 function show(req, res) {
   const id = parseInt(req.params.id);
 
-  const sql = `SELECT * FROM posts WHERE id = ?`;
-  connection.query(sql, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: "Database query failed" });
-    res.json(results);
-  });
-  // TODO
-  /* 
   // controllo se l'id è valido
   if (isNaN(id)) {
     const err = new Error("Id required not valid");
@@ -61,6 +54,36 @@ function show(req, res) {
     throw err;
   }
 
+  const postsSql = `
+              SELECT * 
+              FROM posts 
+              WHERE id = ?
+              `;
+
+  const tagsSql = `
+              SELECT tags.* 
+              FROM tags 
+              
+              INNER JOIN post_tag
+              ON tags.id = post_tag.tag_id
+              WHERE post_tag.post_id = ?
+              `;
+
+  connection.query(postsSql, [id], (err, postsResults) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (postsResults.length === 0)
+      return res.status(404).json({ error: "Id required not found" });
+
+    const post = postsResults[0];
+
+    connection.query(tagsSql, [id], (err, tagsResults) => {
+      if (err) return res.status(500).json({ error: "Database query failed" });
+      post.tags = tagsResults;
+      res.json(post);
+    });
+  });
+  // TODO
+  /* 
   // trovo il post tramite l'id
   const postRequired = posts.find((post) => post.id === id);
 
