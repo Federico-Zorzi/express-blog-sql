@@ -46,6 +46,11 @@ function index(req, res) {
 function show(req, res) {
   const id = parseInt(req.params.id);
 
+  const sql = `SELECT * FROM posts WHERE id = ?`;
+  connection.query(sql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
   // TODO
   /* 
   // controllo se l'id è valido
@@ -194,6 +199,14 @@ function modify(req, res) {
 function destroy(req, res) {
   const id = parseInt(req.params.id);
 
+  // controllo se l'id è valido
+  if (isNaN(id)) {
+    const err = new Error("Id required not valid");
+    err.status = 400;
+    err.error = "Bad request by client";
+    throw err;
+  }
+
   const sql = `DELETE FROM posts WHERE id = ?`;
   connection.query(sql, [id], (err) => {
     if (err) return res.status(500).json({ error: "Database query failed" });
@@ -202,14 +215,6 @@ function destroy(req, res) {
 
   // TODO
   /*
- // controllo se l'id è valido 
-  if (isNaN(id)) {
-    const err = new Error("Id required not valid");
-    err.status = 400;
-    err.error = "Bad request by client";
-    throw err;
-  }
-
   // ricerca dell'index dell'elemento con l'id scelto da eliminare
   const postToDelete = posts.find((post) => post.id === id);
 
