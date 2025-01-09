@@ -1,6 +1,4 @@
-// const posts = require("../db/postsList");
 const connection = require("../data/db");
-const categories = require("../data/postCategories");
 
 // * INDEX
 function index(req, res) {
