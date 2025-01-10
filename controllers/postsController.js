@@ -145,6 +145,28 @@ function store(req, res) {
 // * UPDATE
 function update(req, res) {
   const id = parseInt(req.params.id);
+  const { title, content, image } = req.body;
+
+  if (isNaN(id)) {
+    const err = new Error("Id required not valid");
+    err.status = 400;
+    err.error = "Bad request by client";
+    throw err;
+  }
+
+  if (!title || !content || !image) {
+    const err = new Error("Check all parameters passed");
+    err.status = 400;
+    err.error = "Bad request by client";
+    throw err;
+  }
+
+  const sql = `UPDATE posts SET title = ?, content = ?, image = ? WHERE (id = ?);`;
+
+  connection.query(sql, [title, content, image, id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json({ id, title, content, image });
+  });
 
   // TODO
   /* 
@@ -185,6 +207,41 @@ function update(req, res) {
 // * MODIFY
 function modify(req, res) {
   const id = parseInt(req.params.id);
+  const { title, content, image } = req.body;
+
+  if (isNaN(id)) {
+    const err = new Error("Id required not valid");
+    err.status = 400;
+    err.error = "Bad request by client";
+    throw err;
+  }
+
+  /*   if (title) {
+    let sql = `UPDATE posts SET title = ? WHERE (id = ?);`;
+
+    connection.query(sql, [title, id], (err, results) => {
+      if (err) return res.status(500).json({ error: "Database query failed" });
+      res.json({ id, title });
+    });
+  }
+
+  if (content) {
+    let sql = `UPDATE posts SET content = ? WHERE (id = ?);`;
+
+    connection.query(sql, [content, id], (err, results) => {
+      if (err) return res.status(500).json({ error: "Database query failed" });
+      res.json({ id, content });
+    });
+  }
+
+  if (image) {
+    let sql = `UPDATE posts SET image = ? WHERE (id = ?);`;
+
+    connection.query(sql, [image, id], (err, results) => {
+      if (err) return res.status(500).json({ error: "Database query failed" });
+      res.json({ id, image });
+    });
+  } */
 
   // TODO
   /* 
